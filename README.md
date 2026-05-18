@@ -57,19 +57,14 @@ SUPABASE_KEY=your-anon-or-service-role-key
 - The **anon key** works if Row-Level Security is off (default for new tables).
 - Use the **service role key** if you've enabled RLS without writing policies.
 
-`.env` is gitignored. The CLI reads it from the current working directory when invoked.
+`.env` is gitignored. The CLI looks for it in the current working directory and walks up parent directories, so you can run `taskcli` from anywhere inside the project tree.
 
 ## Usage
 
 ### Projects
 
 ```bash
-taskcli project add \
-  --title "Launch v1" \
-  --description "Q3 release" \
-  --start 2026-06-01 \
-  --end 2026-09-30 \
-  --stages 4
+taskcli project add --title "Launch v1" --description "Q3 release" --start 2026-06-01 --end 2026-09-30 --stages 4
 
 taskcli project list
 taskcli project show 1
@@ -80,15 +75,7 @@ taskcli project delete 1     # cascades to its tasks
 ### Tasks
 
 ```bash
-taskcli task add \
-  --project 1 \
-  --title "Wireframes" \
-  --description "First-pass mockups" \
-  --status todo \
-  --assigned-to "Aarav" \
-  --stage 1 \
-  --start 2026-06-01 \
-  --end 2026-06-15
+taskcli task add --project 1 --title "Wireframes" --description "First-pass mockups" --status todo --assigned-to "Aarav" --stage 1 --start 2026-06-01 --end 2026-06-15
 
 taskcli task list                          # all tasks
 taskcli task list --project 1              # tasks in project 1

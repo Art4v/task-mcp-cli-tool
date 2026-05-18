@@ -2,10 +2,10 @@ import os
 import sys
 from functools import lru_cache
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from supabase import create_client, Client
 
-load_dotenv()
+load_dotenv(find_dotenv(usecwd=True))
 
 
 @lru_cache(maxsize=1)

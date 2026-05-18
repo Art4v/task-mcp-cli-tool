@@ -29,3 +29,6 @@ create table if not exists tasks (
 );
 
 create index if not exists tasks_project_id_idx on tasks(project_id);
+
+alter table projects disable row level security;
+alter table tasks    disable row level security;
