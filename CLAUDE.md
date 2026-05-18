@@ -15,6 +15,8 @@ python -m taskcli --help    # invoke without going through pipx
 
 `taskcli` (installed via pipx or `pip install -e .`) and `python -m taskcli` both dispatch through `taskcli/cli.py:main`.
 
+`pipx install .` snapshots the source — re-run with `pipx install --force --editable .` (or `pipx reinstall taskcli`) after code changes. Prefer `pipx install --editable .` from the start so edits take effect without reinstalling.
+
 ## Architecture
 
 ```
@@ -41,6 +43,8 @@ schema.sql              # one-shot Supabase DDL (idempotent)
 - **Errors exit with `sys.exit("message")`**, not raised exceptions. This produces a clean message with no traceback, matching the validation table in the README. Don't replace these with `raise`.
 - **`assigned_to` arrives from argparse via `dest="assigned_to"`** because the flag is `--assigned-to`. Other multi-word fields use the same pattern.
 - **`schema.sql` is idempotent** (`if not exists` + `do $$ ... $$` for the enum). Re-running it must be safe.
+- **`.env` discovery walks up from cwd** via `find_dotenv(usecwd=True)` in `db.py`. The CLI works from any subdirectory of the project but *not* from unrelated dirs (e.g. `C:\Windows\System32`). If you add a fallback location (e.g. `~/.config/taskcli/.env`), update the README too.
+- **RLS is disabled on `projects` and `tasks`** in `schema.sql` because this is a single-user local CLI using a publishable/anon key. Any new table added to `schema.sql` needs its own `alter table ... disable row level security;` line, or callers will hit `42501 row-level security` errors.
 
 ## Adding a new field
 
